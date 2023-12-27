@@ -79,9 +79,9 @@ class ParseCdpField
         $children     = $group['children'];
         $groupLogical = $group['logical'];
 
-        $query->where(function () use ($children, $groupLogical, $query) {
+        $query->where(function (Builder $q) use ($children, $groupLogical) {
             foreach ($children as $child) {
-                $this->buildQuery($child, $query, $groupLogical);
+                $this->buildQuery($child, $q, $groupLogical);
             }
         }, null, null, $logical);
     }

@@ -1,0 +1,31 @@
+{
+    "type": "group",
+    "logical": "and",
+    "collapsed": false,
+    "children": [
+        {
+            "type": "field",
+            "table": "customer",
+            "field": "medium_id",
+            "value": [
+                22
+            ],
+            "operator": "=",
+            "selectedValue": [
+                "customer",
+                "medium_id"
+            ]
+        },
+        {
+            "type": "field",
+            "table": "customer_product",
+            "field": "status",
+            "value": 1,
+            "operator": "=",
+            "selectedValue": [
+                "customer_product",
+                "status"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "type": "group",
+    "logical": "and",
+    "collapsed": false,
+    "children": [
+        {
+            "type": "field",
+            "table": "customer",
+            "field": "name",
+            "value": "\u5f20",
+            "operator": "like",
+            "selectedValue": [
+                "customer",
+                "name"
+            ]
+        }
+    ]
+}

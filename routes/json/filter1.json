@@ -1,0 +1,47 @@
+{
+    "type": "group",
+    "logical": "and",
+    "collapsed": false,
+    "children": [
+        {
+            "type": "field",
+            "table": "customer",
+            "field": "amount",
+            "value": 1000,
+            "operator": ">",
+            "selectedValue": [
+                "customer",
+                "amount"
+            ]
+        },
+        {
+            "type": "group",
+            "logical": "or",
+            "collapsed": false,
+            "children": [
+                {
+                    "type": "field",
+                    "table": "customer_product",
+                    "field": "status",
+                    "value": 1,
+                    "operator": "=",
+                    "selectedValue": [
+                        "customer_product",
+                        "status"
+                    ]
+                },
+                {
+                    "type": "field",
+                    "table": "customer_product",
+                    "field": "times",
+                    "value": 2,
+                    "operator": ">",
+                    "selectedValue": [
+                        "customer_product",
+                        "times"
+                    ]
+                }
+            ]
+        }
+    ]
+}
