@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  php:
+    image: edwinhuish/php-dev:8.2-apache-bullseye
+    command: sleep infinity
+    env_file:
+      - docker.env
+    working_dir: $PWD
+    volumes:
+      - $PWD:$PWD
+      - ./php/config.ini:/usr/local/etc/php/conf.d/~config.ini
+      - ~/.ssh:/home/www/.ssh
+      - ~/.gitconfig:/home/www/.gitconfig
+      - ./php/intelephense:/home/www/intelephense
+    depends_on:
+      - postgres
+
+  postgres:
+    # image: postgres
+    build:
+      context: postgres
+      dockerfile: Dockerfile
+    # ports:
+    #   - 5432:5432
+    restart: always
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: demo
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /var/lib/postgresql/data/pgdata
