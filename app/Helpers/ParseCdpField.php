@@ -32,7 +32,7 @@ class ParseCdpField
     public function filter(?array $conditions): self
     {
         if ($conditions) {
-            $this->buildQuery($conditions, $this->filterQuery, 'and');
+            $this->buildQuery($conditions, $this->filterQuery, $this->filterQuery, 'and');
         }
         return $this;
     }
@@ -45,7 +45,7 @@ class ParseCdpField
     public function exclude(?array $conditions): self
     {
         if ($conditions) {
-            $this->buildQuery($conditions, $this->excludeQuery, 'not');
+            $this->buildQuery($conditions, $this->excludeQuery, $this->excludeQuery, 'not');
         }
         return $this;
     }
@@ -57,12 +57,12 @@ class ParseCdpField
      * @param string $logical
      * @return void
      */
-    public function buildQuery(array $conditions, Builder $query, string $logical): void
+    public function buildQuery(array $conditions, Builder $rootQuery, Builder $query, string $logical): void
     {
         if ($conditions['type'] === 'group') {
-            $this->handleGroup($conditions, $query, $logical);
+            $this->handleGroup($conditions, $rootQuery, $query, $logical);
         } else {
-            $this->handleField($conditions, $query, $logical);
+            $this->handleField($conditions, $rootQuery, $query, $logical);
         }
     }
 
@@ -74,14 +74,14 @@ class ParseCdpField
      * @return void
      */
 
-    protected function handleGroup(array $group, Builder $query, string $logical): void
+    protected function handleGroup(array $group, Builder $rootQuery, Builder $query, string $logical): void
     {
         $children     = $group['children'];
         $groupLogical = $group['logical'];
 
-        $query->where(function (Builder $q) use ($children, $groupLogical) {
+        $query->where(function (Builder $q) use ($children, $groupLogical, $rootQuery) {
             foreach ($children as $child) {
-                $this->buildQuery($child, $q, $groupLogical);
+                $this->buildQuery($child, $rootQuery, $q, $groupLogical);
             }
         }, null, null, $logical);
     }
@@ -93,7 +93,7 @@ class ParseCdpField
      * @param string $logical
      * @return void
      */
-    protected function handleField(array $field, Builder $query, string $logical): void
+    protected function handleField(array $field, Builder $rootQuery, Builder $query, string $logical): void
     {
         $table      = $field['table'];
         $columnName = $table . '.' . $field['field'];
@@ -128,7 +128,7 @@ class ParseCdpField
                 break;
         }
 
-        $this->addJoin($table, $query);
+        $this->addJoin($table, $rootQuery);
     }
 
     /**
