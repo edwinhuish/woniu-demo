@@ -18,7 +18,7 @@ class Parser
 
         $this->query  = DB::table($data['table'])->distinct()->select(['customer.id AS customer_id']);
 
-        $this->parseConditions($this->query, $data['children'], $data['logical']);
+        $this->parseConditions($this->query, $data['children']);
 
     }
 
@@ -27,28 +27,28 @@ class Parser
         return new static($data);
     }
 
-    protected function parseConditions(Builder $query, ?array $conditions, ?string $logical = 'and')
+    protected function parseConditions(Builder $query, ?array $conditions)
     {
         if(!$conditions) {
             return;
         }
 
-        $logical = $logical === 'or' ? 'or' : 'and';
-
         foreach($conditions as $condition) {
-            $this->parseCondition($query, $condition, $logical);
+            $this->parseCondition($query, $condition);
         }
 
     }
 
 
-    protected function parseCondition(Builder $query, array $condition, string $boolean)
+    protected function parseCondition(Builder $query, array $condition)
     {
+        $boolean = ($condition['logical'] ?? 'and') === 'or' ? 'or' : 'and';
+
         if($condition['type'] === 'group') {
 
             $query->where(function ($q) use ($condition) {
-                $this->parseConditions($q, $condition['children'], $condition['logical']);
-            });
+                $this->parseConditions($q, $condition['children']);
+            }, null, null, $boolean);
 
             return;
         }

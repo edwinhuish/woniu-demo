@@ -1,9 +1,9 @@
 {
     "table": "customer",
-    "logical": "and",
     "collapsed": false,
     "children": [
         {
+            "logical": "and",
             "type": "field",
             "table": "customer",
             "field": "amount",
