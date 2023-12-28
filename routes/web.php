@@ -24,8 +24,9 @@ Route::get('/', function () {
 Route::get('test1', function () {
     $filter = file_get_contents(__DIR__ . '/json/filter1.json');
     $exclude = '';
-    $parser = new \App\Helpers\ParseCdpField();
-    return $parser->filter(json_decode($filter, true))->exclude(json_decode($exclude, true))->getSql();
+    // $parser = new \App\Helpers\ParseCdpField();
+    $parser = \App\Helpers\Parser::parseQuery(json_decode($filter, true));
+    return $parser->toRawSql();
 });
 
 // 带排除规则
